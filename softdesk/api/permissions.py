@@ -1,4 +1,5 @@
 from rest_framework import permissions
+from .models import Contributor
 
 class IsAuthorOrReadOnly(permissions.BasePermission):
     """
@@ -10,8 +11,10 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
         return obj.author == request.user
 
 class IsProjectContributor(permissions.BasePermission):
-    """
-    Permission personnalisée pour n'autoriser que les contributeurs d'un projet à y accéder.
-    """
     def has_object_permission(self, request, view, obj):
-        return request.user in obj.contributors.all()
+        if isinstance(obj, Project):
+            return Contributor.objects.filter(user=request.user, project=obj).exists()
+        if hasattr(obj, 'project'):
+            return Contributor.objects.filter(user=request.user, project=obj.project).exists()
+        return False
+

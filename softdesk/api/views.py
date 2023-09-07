@@ -1,7 +1,8 @@
 from rest_framework import generics, permissions
-from .models import CustomUser, Project, Contributor, Issue, Comment
+from .models import CustomUser, Project, Issue, Comment, Contributor
 from .serializers import CustomUserSerializer, ProjectSerializer, ContributorSerializer, IssueSerializer, CommentSerializer
 from .permissions import IsAuthorOrReadOnly, IsProjectContributor
+from django.db import transaction
 
 # Vues pour User
 class UserListCreateView(generics.ListCreateAPIView):
@@ -19,9 +20,12 @@ class ProjectListCreateView(generics.ListCreateAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [permissions.IsAuthenticated]
-
+    
+    @transaction.atomic
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        project = serializer.save()
+        project.authors.add(self.request.user)
+        Contributor.objects.create(user=self.request.user, project=project)
 
 class ProjectRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
@@ -46,7 +50,8 @@ class IssueListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated, IsProjectContributor]
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        contributor = Contributor.objects.get(user=self.request.user, project=serializer.validated_data['project'])
+        issue = serializer.save(author=self.request.user)
 
 class IssueRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Issue.objects.all()
@@ -60,7 +65,8 @@ class CommentListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated, IsProjectContributor]
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        contributor = Contributor.objects.get(user=self.request.user, project=serializer.validated_data['issue'].project)
+        comment = serializer.save(author=self.request.user)
 
 class CommentRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
