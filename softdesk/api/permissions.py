@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from .models import Contributor
+from .models import Contributor, Project, CustomUser
 
 class IsAuthorOrReadOnly(permissions.BasePermission):
     """
@@ -8,6 +8,9 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
             return True
+        # Vérification pour les instances CustomUser
+        if isinstance(obj, CustomUser):
+            return obj == request.user
         return obj.author == request.user
 
 class IsProjectContributor(permissions.BasePermission):
