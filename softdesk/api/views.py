@@ -28,7 +28,7 @@ class ProjectListCreateView(generics.ListCreateAPIView):
     
     @transaction.atomic
     def perform_create(self, serializer):
-        project = serializer.save()
+        project = serializer.save(author=self.request.user)
         project.authors.add(self.request.user)
         Contributor.objects.create(user=self.request.user, project=project)
 

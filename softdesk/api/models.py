@@ -27,6 +27,8 @@ class CustomUser(AbstractUser):
         related_name="customuser_user_permissions",
         related_query_name="customuser",
     )
+    class Meta:
+        ordering = ['username']
 
 class Project(models.Model):
     TYPES = [('BE', 'BE'), ('FE', 'FE'), ('iOS', 'iOS'), ('Android', 'Android')]
@@ -35,10 +37,15 @@ class Project(models.Model):
     type = models.CharField(choices=TYPES, max_length=10)
     created_time = models.DateTimeField(auto_now_add=True)
     authors = models.ManyToManyField(CustomUser, related_name='authored_projects')
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='created_projects')
+    class Meta:
+        ordering = ['created_time']
 
 class Contributor(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    class Meta:
+        ordering = ['user']
 
 class Issue(models.Model):
     PRIORITIES = [('LOW', 'LOW'), ('MEDIUM', 'MEDIUM'), ('HIGH', 'HIGH')]
@@ -54,6 +61,8 @@ class Issue(models.Model):
     assigned_to = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='assigned_issues')
     created_time = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='authored_issues')
+    class Meta:
+        ordering = ['created_time']
 
 class Comment(models.Model):
     description = models.TextField()
@@ -61,3 +70,5 @@ class Comment(models.Model):
     created_time = models.DateTimeField(auto_now_add=True)
     uuid = models.UUIDField(unique=True, auto_created=True, primary_key=True, default=uuid.uuid4)
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='authored_comments')
+    class Meta:
+        ordering = ['created_time']

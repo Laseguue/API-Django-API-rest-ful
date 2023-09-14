@@ -8,7 +8,6 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
             return True
-        # Vérification pour les instances CustomUser
         if isinstance(obj, CustomUser):
             return obj == request.user
         return obj.author == request.user
@@ -16,8 +15,10 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
 class IsProjectContributor(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if isinstance(obj, Project):
-            return Contributor.objects.filter(user=request.user, project=obj).exists()
+            return obj.author == request.user or Contributor.objects.filter(user=request.user, project=obj).exists()
         if hasattr(obj, 'project'):
             return Contributor.objects.filter(user=request.user, project=obj.project).exists()
         return False
+
+    
 
