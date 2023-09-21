@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from .models import Contributor, Project, Comment, CustomUser
+from api.models import Contributor, Project, Comment, CustomUser
 
 class IsAuthorOrReadOnly(permissions.BasePermission):
     """
