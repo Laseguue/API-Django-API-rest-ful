@@ -1,11 +1,10 @@
 from django.contrib import admin
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from django.urls import path
-from api.views import (UserListCreateView, UserRetrieveUpdateDestroyView, 
-                      ProjectListCreateView, ProjectRetrieveUpdateDestroyView, 
-                      ContributorListCreateView, ContributorRetrieveUpdateDestroyView, 
-                      IssueListCreateView, IssueRetrieveUpdateDestroyView, 
+from api.views import (UserListCreateView, UserRetrieveUpdateDestroyView,
+                      ProjectListCreateView, ProjectRetrieveUpdateDestroyView,
+                      ContributorListCreateView, ContributorRetrieveUpdateDestroyView,
+                      IssueListCreateView, IssueRetrieveUpdateDestroyView,
                       CommentListCreateView, CommentRetrieveUpdateDestroyView)
 
 urlpatterns = [
