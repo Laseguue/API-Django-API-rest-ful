@@ -82,7 +82,7 @@ Méthode HTTP : GET, PUT, DELETE
 
 Remarque : Assurez-vous d'avoir un token d'authentification valide pour accéder à la plupart de ces endpoints. Utilisez l'en-tête Authorization avec la valeur Bearer <Votre_Token> dans vos requêtes.
 
-
+https://documenter.getpostman.com/view/29596074/2s9YR9aDAL
 
 ## Auteur
 [Laseguue](https://github.com/Laseguue)
