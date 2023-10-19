@@ -12,7 +12,6 @@ API Django - API Restful est une application web Django qui expose une API Restf
 ## Structure du Projet
 - `softdesk/api` : Dossier contenant les fichiers de l'API, tels que les modèles, les vues, et les serializers.
 - `softdesk/softdesk` : Dossier contenant les fichiers de configuration de l'application Django.
-- `venv` : Dossier contenant l'environnement virtuel Python.
 
 ## Exigences
 - Python 3.x
@@ -29,7 +28,61 @@ API Django - API Restful est une application web Django qui expose une API Restf
 7. Accédez à l'API via `http://127.0.0.1:8000/api/`.
 
 ## Utilisation
-Utilisez les endpoints API pour gérer les utilisateurs, les projets, les issues, et les commentaires. Consultez la documentation de l'API pour plus d'informations sur les endpoints disponibles et les méthodes HTTP supportées.
+Authentification
+Token d'authentification :
+
+Endpoint : /token-auth/
+Méthode HTTP : POST
+Données requises : username, password
+Réponse : Token JWT pour l'authentification.
+Rafraîchissement du token :
+
+Endpoint : /token-refresh/
+Méthode HTTP : POST
+Données requises : Token JWT actuel.
+Réponse : Nouveau token JWT.
+Utilisateurs
+Lister et créer des utilisateurs :
+
+Endpoint : /users/
+Méthode HTTP : GET (pour lister), POST (pour créer)
+Données requises pour la création : username, password, age, etc.
+Récupérer, mettre à jour ou supprimer un utilisateur :
+
+Endpoint : /users/<int:pk>/
+Méthode HTTP : GET, PUT, DELETE
+Projets
+Lister et créer des projets :
+Endpoint : /projects/
+Méthode HTTP : GET (pour lister), POST (pour créer)
+Récupérer, mettre à jour ou supprimer un projet :
+Endpoint : /projects/<int:pk>/
+Méthode HTTP : GET, PUT, DELETE
+Issues
+Lister et créer des issues :
+Endpoint : /issues/
+Méthode HTTP : GET (pour lister), POST (pour créer)
+Récupérer, mettre à jour ou supprimer une issue :
+Endpoint : /issues/<int:pk>/
+Méthode HTTP : GET, PUT, DELETE
+Commentaires
+Lister et créer des commentaires :
+Endpoint : /comments/
+Méthode HTTP : GET (pour lister), POST (pour créer)
+Récupérer, mettre à jour ou supprimer un commentaire :
+Endpoint : /comments/<uuid:pk>/
+Méthode HTTP : GET, PUT, DELETE
+Contributeurs
+Lister et créer des contributeurs :
+Endpoint : /contributors/
+Méthode HTTP : GET (pour lister), POST (pour créer)
+Récupérer, mettre à jour ou supprimer un contributeur :
+Endpoint : /contributors/<int:pk>/
+Méthode HTTP : GET, PUT, DELETE
+
+Remarque : Assurez-vous d'avoir un token d'authentification valide pour accéder à la plupart de ces endpoints. Utilisez l'en-tête Authorization avec la valeur Bearer <Votre_Token> dans vos requêtes.
+
+
 
 ## Auteur
 [Laseguue](https://github.com/Laseguue)
